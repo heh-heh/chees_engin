@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <iostream>
+#include "game.cpp"
 using namespace std;
 
 void testlog(string logtext);
+gamemanager game;
 
 int main(void){
-    testlog("test\n");
+    game.rendergame();
 
     return 0;
 }
