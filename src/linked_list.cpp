@@ -91,7 +91,7 @@ public:
 	void print() const {
 		for (Node* current = head; current != nullptr; current = current->next) {
 			std::cout << "[" << current->data.x << ", "
-					  << current->data.y << "] -> ";
+				      << current->data.y << "] -> ";
 		}
 
 		std::cout << "nullptr\n";

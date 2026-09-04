@@ -58,8 +58,8 @@ private:
                 return dy == 0 && dx == direction * 2 && turncount == 0;
             }
             case 2:
-                return (distance_x == 2 && distance_y == 1) ||
-                       (distance_x == 1 && distance_y == 2);
+                return  (distance_x == 2 && distance_y == 1) ||
+                        (distance_x == 1 && distance_y == 2);
             case 3:
                 return distance_x == distance_y;
             case 4:
@@ -78,8 +78,8 @@ private:
     }
 
     static bool is_on_board(vector position) {
-        return position.x >= 0 && position.x < 8 &&
-               position.y >= 0 && position.y < 8;
+        return  position.x >= 0 && position.x < 8 &&
+                position.y >= 0 && position.y < 8;
     }
 
     void add_path(vector destination) {
