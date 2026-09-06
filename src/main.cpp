@@ -7,7 +7,7 @@ void testlog(string logtext);
 gamemanager game;
 
 int main(void){
-    game.rendergame();
+    game.startgame();
 
     return 0;
 }

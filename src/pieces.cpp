@@ -1,12 +1,15 @@
 #include "vector.cpp"
 #include "linked_list.cpp"
 
+#ifndef CHESS_PIECES_H
+#define CHESS_PIECES_H
+
 class pieces {
 public:
     // color: -1 white, 1 black
     // type: 1 pawn, 2 knight, 3 bishop, 4 rook, 5 queen, 6 king
     pieces(int piece_color, int piece_type, vector start_position)
-        : color(piece_color), type(piece_type), nowposition(start_position) {}
+        : color(piece_color), type(piece_type), nowposition(start_position) {};
 
     bool move(int x, int y) {
         vector destination{x, y};
@@ -24,6 +27,10 @@ public:
 
     vector position() const {
         return nowposition;
+    }
+
+    int getcolor() const {
+        return color;
     }
 
     const linked_list& path() const {
@@ -49,7 +56,7 @@ private:
 
         switch (type) {
             case 1: {
-                int direction = color == -1 ? 1 : -1;
+                int direction = color == 1 ? 1 : -1;
 
                 if (dy == 0 && dx == direction) {
                     return true;
@@ -97,3 +104,5 @@ private:
         }
     }
 };
+
+#endif

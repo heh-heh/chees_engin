@@ -2,6 +2,9 @@
 #include <iostream>
 #include "vector.cpp"
 
+#ifndef CHESS_LINKED_LIST_H
+#define CHESS_LINKED_LIST_H
+
 class linked_list {
 private:
 	struct Node {
@@ -116,3 +119,5 @@ public:
 		list_size = 0;
 	}
 };
+
+#endif
