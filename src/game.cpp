@@ -104,11 +104,22 @@ class gamemanager{
                 return;
             }
 
+            // 목적지의 상대 기물을 먼저 찾고 생존 상태를 죽음으로 바꾼 뒤,
+            // 실제 기물의 좌표는 공격자 위치에서 목적지로 옮겨야 한다.
+            pieces* captured_piece = find_piece_at(to_x, to_y);
+            const bool will_capture_enemy =
+                captured_piece != nullptr &&
+                captured_piece != selected_piece &&
+                captured_piece->getcolor() != selected_piece->getcolor();
+
             std::lock_guard<std::mutex> lock(display_mutex);
             if (director.move_piece(*selected_piece, to_x, to_y, &board)) {
-                pieces* captured_piece = find_piece_at(to_x, to_y);
-                if (captured_piece != nullptr && captured_piece != selected_piece &&
-                    captured_piece->getcolor() != selected_piece->getcolor()) {
+                // 이동이 성공한 경우에만 기물 객체의 위치를 목적지로 갱신한다.
+                selected_piece->move(to_x, to_y, &board);
+
+                // 보드 배열은 칸 번호만 보관하는 구조라서, 잡힌 상대 기물이
+                // 있으면 그 칸을 비우고, 이동하는 기물의 숫자는 새 칸으로 이동시킨다.
+                if (will_capture_enemy) {
                     captured_piece->set_alive(false);
                     board.remove_piece_at(vector{to_x, to_y});
                 }

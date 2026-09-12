@@ -49,10 +49,14 @@ class Board {
                 std::cout << std::endl;
             }
         }
+        // 보드 배열의 숫자는 기물 타입과 색을 함께 표현하는 값이므로,
+        // 좌표 이동은 칸의 값을 출발 칸에서 목적지 칸으로 복사하는 형태다.
         void move_piece(vector from, vector to){
             map[to.x][to.y] = map[from.x][from.y];
             map[from.x][from.y] = 0;
         }
+
+        // 잡힌 기물은 보드 안쪽에 남아 있지 않도록 해당 위치를 비운다.
         void remove_piece_at(vector position){
             map[position.x][position.y] = 0;
         }
