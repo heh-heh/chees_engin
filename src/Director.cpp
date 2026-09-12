@@ -12,8 +12,8 @@ public:
 		return piece.getcolor() == current_color;
 	}
 
-	bool move_piece(pieces& piece, int x, int y) {
-		if (piece.getcolor() != current_color || !piece.move(x, y)) {
+	bool move_piece(pieces& piece, int x, int y, const Board* board = nullptr) {
+		if (piece.getcolor() != current_color || !piece.move(x, y, board)) {
 			return false;
 		}
 
