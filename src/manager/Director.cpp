@@ -1,7 +1,7 @@
 #include <chrono>
 #include <cstddef>
-#include "pieces.cpp"
-#include "vector.cpp"
+#include "../object/pieces.cpp"
+#include "../datas/vector.cpp"
 
 class Director{
 public:

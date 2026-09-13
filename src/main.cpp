@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <iostream>
-#include "game.cpp"
+#include "game/game.cpp"
 using namespace std;
 
 void testlog(string logtext);

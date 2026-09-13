@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <vector>
-#include "vector.cpp"
+#include "../datas/vector.cpp"
 
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H

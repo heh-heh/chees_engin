@@ -1,5 +1,5 @@
-#include "vector.cpp"
-#include "linked_list.cpp"
+#include "../datas/vector.cpp"
+#include "../datas/linked_list.cpp"
 
 #ifndef CHESS_PIECES_H
 #define CHESS_PIECES_H

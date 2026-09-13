@@ -7,8 +7,8 @@
 #include <vector>
 #include <algorithm>
 #include "bord.cpp"
-#include "Director.cpp"
-#include "pieces.cpp"
+#include "../manager/Director.cpp"
+#include "../object/pieces.cpp"
 
 class gamemanager{
     public:
