@@ -25,15 +25,20 @@ C++ 학습을 목적으로 구현한 터미널 기반 체스 엔진 프로젝트
 
 ```text
 src/
-├── main.cpp        # 프로그램 진입점
-├── game.cpp        # 게임 생명주기 오케스트레이션
-├── update.cpp      # 입력, 선택, 이동 갱신, 상태 전이
-├── render.cpp      # 보드 출력, 상태 표시, 화면 갱신
-├── bord.cpp        # 보드 출력, 업로드/제거/좌표 판정
-├── pieces.cpp      # 기물 규칙, 이동 검증, 체크/메이트 뼈대, 생존 상태 관리
-├── vector.cpp      # 좌표 타입 구현
-├── linked_list.cpp # 이동 경로 저장 구조
-└── Director.cpp    # 턴 관리, 색상 관리, 이동 규칙 판정
+├── main.cpp                # 프로그램 진입점
+├── game/
+│   ├── game.cpp             # 게임 생명주기 오케스트레이션
+│   ├── update.cpp           # 입력, 선택, 이동 갱신, 상태 전이
+│   └── render.cpp           # 보드 출력, 상태 표시, 화면 갱신
+│   └── bord.cpp             # 보드 출력, 좌표 판정, 상태 관리
+├── manager/
+│   └── Director.cpp        # 턴 관리, 색상 관리, 이동 규칙 판정
+├── object/
+│   └── pieces.cpp          # 기물 규칙, 이동 검증, 체크/메이트 뼈대, 생존 상태 관리
+├── datas/
+│   ├── vector.cpp           # 좌표 타입 구현
+│   └── linked_list.cpp      # 이동 경로 저장 구조
+└── include_zip.cpp          # 자료 구조 헤더/소스 포함 허브
 ```
 
 ## 실행 방법
@@ -69,11 +74,14 @@ Enter destination coordinates (tx ty): 2 0
 
 현재 구조는 아래와 같은 책임 분리를 지향합니다.
 
-- `main.cpp`: 게임 실행 시작점
-- `game.cpp`: 게임 생명주기와 루프 오케스트레이션
-- `update.cpp`: 입력, 좌표 선택, 이동 처리, 상태 갱신
-- `render.cpp`: 보드 렌더링, 상태 바 갱신, 화면 제어
-- `Director.cpp`: 규칙 검증, 이동 가능성 판정, 턴/색상 제어
+- `src/main.cpp`: 게임 실행 시작점
+- `src/game/game.cpp`: 게임 생명주기와 루프 오케스트레이션
+- `src/game/update.cpp`: 입력, 좌표 선택, 이동 처리, 상태 갱신
+- `src/game/render.cpp`: 보드 렌더링, 상태 바 갱신, 화면 제어
+- `src/manager/Director.cpp`: 규칙 검증, 이동 가능성 판정, 턴/색상 제어
+- `src/object/pieces.cpp`: 기물 객체와 이동 규칙
+- `src/datas/vector.cpp`: 좌표 자료형
+- `src/datas/linked_list.cpp`: 이동 경로 자료구조
 
 이 분리 구조는 게임 엔진 내부를 가볍게 하고, 이후 WinAPI GUI나 다른 렌더링 계층을 붙일 때 확장 포인트를 자연스럽게 유지합니다.
 
