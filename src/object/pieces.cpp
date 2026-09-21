@@ -177,13 +177,18 @@ private:
 
         switch (type) {// type: 1 pawn, 2 knight, 3 bishop, 4 rook, 5 queen, 6 king
             case 1: {
-                int direction = color == 1 ? 1 : -1;
+                int direction = color == 1 ? -1 : 1;
 
-                if (dy == 0 && dx == direction) {
+                if (dx == 0 && dy == direction && (board == nullptr || !board->has_piece(destination))) {
                     return true;
                 }
 
-                return dy == 0 && dx == direction * 2 && turncount == 0;
+                if (std::abs(dx) == 1 && dy == direction && board != nullptr && board->is_enemy_at(destination, color)) {
+                    return true;
+                }
+
+                return dx == 0 && dy == direction * 2 && turncount == 0 &&
+                       (board == nullptr || !board->has_piece(vector{destination.x, nowposition.y + direction}));
             }
             case 2:
                 return  (distance_x == 2 && distance_y == 1) ||

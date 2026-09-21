@@ -1,17 +1,11 @@
-#include <stdio.h>
+#include <cstdlib>
 #include <iostream>
-#include "game/game.cpp"
-using namespace std;
+#include <string>
 
-void testlog(string logtext);
-gamemanager game;
+int main(void) {
+    std::cout << "Launching GUI chess board..." << std::endl;
 
-int main(void){
-    game.startgame();
-
-    return 0;
-}
-
-void testlog(string logtext){
-    cout << logtext ;
+    const std::string gui_path = "./build/chess_gui";
+    const int exit_code = std::system(gui_path.c_str());
+    return exit_code;
 }

@@ -18,11 +18,11 @@ class gamemanager{
             pieces2.clear();
             pieces2.reserve(32);
 
-            for (int y = 0; y < 8; ++y) {//기물 생성
-                pieces2.push_back(std::make_unique<pieces>(1, backrank[y], vector{0, y}));
-                pieces2.push_back(std::make_unique<pieces>(1, 1, vector{1, y}));
-                pieces2.push_back(std::make_unique<pieces>(-1, 1, vector{6, y}));
-                pieces2.push_back(std::make_unique<pieces>(-1, backrank[y], vector{7, y}));
+            for (int x = 0; x < 8; ++x) {//기물 생성
+                pieces2.push_back(std::make_unique<pieces>(1, backrank[x], vector{x, 7}));
+                pieces2.push_back(std::make_unique<pieces>(1, 1, vector{x, 6}));
+                pieces2.push_back(std::make_unique<pieces>(-1, 1, vector{x, 1}));
+                pieces2.push_back(std::make_unique<pieces>(-1, backrank[x], vector{x, 0}));
             }
 
             rendergame(true);

@@ -38,7 +38,7 @@ class Board {
                         std::cout << "\033[41;30m";
                     }
 
-                    std::cout << std::setw(2) << map[x][y];
+                    std::cout << std::setw(2) << map[y][x];
 
                     if (is_selected || is_legal_move || is_blocked_move) {
                         std::cout << "\033[0m";
@@ -59,6 +59,18 @@ class Board {
         // 잡힌 기물은 보드 안쪽에 남아 있지 않도록 해당 위치를 비운다.
         void remove_piece_at(vector position){
             map[position.x][position.y] = 0;
+        }
+        void clear_board() {
+            for (int y = 0; y < 8; ++y) {
+                for (int x = 0; x < 8; ++x) {
+                    map[x][y] = 0;
+                }
+            }
+        }
+        void set_piece_at(const vector& position, int piece_value) {
+            if (position.x >= 0 && position.x < 8 && position.y >= 0 && position.y < 8) {
+                map[position.x][position.y] = piece_value;
+            }
         }
         bool has_piece(const vector& position) const {
             return map[position.x][position.y] != 0;
@@ -139,7 +151,7 @@ class Board {
 
                     switch (piece_type) {
                         case 1:
-                            if (dy == 1 && distance_x == 1) {
+                            if (distance_x == 1 && dy == (attacker_color == 1 ? -1 : 1)) {
                                 return true;
                             }
                             break;
@@ -177,14 +189,14 @@ class Board {
         }
     private :
         int map[8][8]={
-            {4, 2, 3, 5, 6, 3, 2, 4},
-            {1, 1, 1, 1, 1, 1, 1, 1},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
-            {0, 0, 0, 0, 0, 0, 0, 0},
+            {-4,-2,-3,-5,-6,-3,-2,-4},
             {-1,-1,-1,-1,-1,-1,-1,-1},
-            {-4,-2,-3,-5,-6,-3,-2,-4}
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {0, 0, 0, 0, 0, 0, 0, 0},
+            {1, 1, 1, 1, 1, 1, 1, 1},
+            {4, 2, 3, 5, 6, 3, 2, 4}
         };
 };
 
