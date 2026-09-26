@@ -101,7 +101,7 @@ ctest --test-dir build --output-on-failure
 
 ## LAN 멀티플레이 방법
 
-같은 로컬 네트워크에 있는 두 PC에서 다음 순서로 진행합니다.
+현재 멀티플레이는 같은 로컬 네트워크(LAN) 환경 기준으로 정리되어 있습니다. 다른 인터넷망에서 접속하려면 별도 포트 포워딩과 방화벽 설정이 필요합니다.
 
 1. 한쪽에서 `Multiplayer` → `Host Match`를 선택합니다.
 2. 화면에 표시되는 `LAN address`와 `Port`를 확인합니다.
@@ -119,7 +119,7 @@ ctest --test-dir build --output-on-failure
 ## 프로젝트 구조
 
 ```text
-chees_engin/
+repository-root/
 ├── CMakeLists.txt
 ├── README.md
 ├── gui/
