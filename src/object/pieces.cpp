@@ -24,6 +24,31 @@ public:
             return false;
         }
 
+        if (board != nullptr) {
+            Board candidate = *board;
+            const vector from = nowposition;
+            const bool en_passant_capture = type == 1 &&
+                std::abs(destination.x - from.x) == 1 &&
+                !candidate.has_piece(destination) &&
+                candidate.is_en_passant_target(destination, color);
+
+            if (en_passant_capture) {
+                const vector captured_position{destination.x, destination.y - (color == 1 ? -1 : 1)};
+                candidate.remove_piece_at(captured_position);
+            }
+
+            if (type == 6 && std::abs(destination.x - from.x) == 2) {
+                const int rook_from_x = destination.x > from.x ? 7 : 0;
+                const int rook_to_x = destination.x > from.x ? 5 : 3;
+                candidate.move_piece({rook_from_x, from.y}, {rook_to_x, from.y});
+            }
+
+            candidate.move_piece(from, destination);
+            if (candidate.is_king_in_check(color)) {
+                return false;
+            }
+        }
+
         pathlist.clear();
         add_path(destination);
         nowposition = destination;

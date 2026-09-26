@@ -53,6 +53,10 @@ target_include_directories(chess_gui PRIVATE
 )
 
 if(WIN32)
+    if(MINGW)
+        target_link_options(chess_console PRIVATE -static-libgcc -static-libstdc++)
+        target_link_options(chess_gui PRIVATE -static-libgcc -static-libstdc++)
+    endif()
     target_link_libraries(chess_gui PRIVATE glfw opengl32 gdi32 user32 shell32)
 else()
     target_link_libraries(chess_gui PRIVATE glfw OpenGL::GL)
