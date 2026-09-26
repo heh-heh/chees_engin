@@ -127,6 +127,10 @@ ctest --test-dir build --output-on-failure
 repository-root/
 ├── CMakeLists.txt
 ├── README.md
+├── chess_windows_release/
+│   └── README.md
+├── chess_windows_release.zip
+├── chess_windows_release_with_dlls.zip
 ├── gui/
 │   └── main.cpp
 ├── scripts/
