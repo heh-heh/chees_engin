@@ -127,10 +127,10 @@ ctest --test-dir build --output-on-failure
 repository-root/
 ├── CMakeLists.txt
 ├── README.md
-├── chess_windows_release/
+├── chess_windows_release/                # 배포 산출물 예시
 │   └── README.md
-├── chess_windows_release.zip
-├── chess_windows_release_with_dlls.zip
+├── chess_windows_release.zip             # 배포 산출물 예시
+├── chess_windows_release_with_dlls.zip   # 배포 산출물 예시
 ├── gui/
 │   └── main.cpp
 ├── scripts/
