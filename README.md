@@ -123,6 +123,8 @@ ctest --test-dir build --output-on-failure
 
 ## 프로젝트 구조
 
+아래 구조는 주요 소스 디렉터리와 함께 배포 산출물 예시도 포함한 개요입니다.
+
 ```text
 repository-root/
 ├── CMakeLists.txt
