@@ -34,6 +34,14 @@ target_include_directories(chess_console PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
 )
 
+include(CTest)
+if(BUILD_TESTING)
+    add_executable(network_protocol_test
+        tests/network_protocol_test.cpp
+    )
+    add_test(NAME network_protocol_test COMMAND network_protocol_test)
+endif()
+
 add_executable(chess_gui
     gui/main.cpp
     ${IMGUI_DIR}/imgui.cpp
@@ -57,7 +65,7 @@ if(WIN32)
         target_link_options(chess_console PRIVATE -static-libgcc -static-libstdc++)
         target_link_options(chess_gui PRIVATE -static-libgcc -static-libstdc++)
     endif()
-    target_link_libraries(chess_gui PRIVATE glfw opengl32 gdi32 user32 shell32)
+    target_link_libraries(chess_gui PRIVATE glfw opengl32 gdi32 user32 shell32 ws2_32)
 else()
     target_link_libraries(chess_gui PRIVATE glfw OpenGL::GL)
 endif()

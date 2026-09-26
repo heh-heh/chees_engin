@@ -207,17 +207,17 @@ class Board {
                             }
                             break;
                         case 3:
-                            if (distance_x == distance_y) {
+                            if (distance_x == distance_y && is_line_clear(from, target)) {
                                 return true;
                             }
                             break;
                         case 4:
-                            if (dx == 0 || dy == 0) {
+                            if ((dx == 0 || dy == 0) && is_line_clear(from, target)) {
                                 return true;
                             }
                             break;
                         case 5:
-                            if (distance_x == distance_y || dx == 0 || dy == 0) {
+                            if (((distance_x == distance_y) || (dx == 0 || dy == 0)) && is_line_clear(from, target)) {
                                 return true;
                             }
                             break;
@@ -238,6 +238,26 @@ class Board {
                 return false;
             }
             return en_passant_target.x == target.x && en_passant_target.y == target.y && moving_color != 0;
+        }
+
+        bool is_line_clear(const vector& from, const vector& target) const {
+            int dx = target.x - from.x;
+            int dy = target.y - from.y;
+            if (dx == 0 && dy == 0) {
+                return true;
+            }
+
+            int step_x = dx == 0 ? 0 : (dx > 0 ? 1 : -1);
+            int step_y = dy == 0 ? 0 : (dy > 0 ? 1 : -1);
+            int steps = std::max(std::abs(dx), std::abs(dy));
+
+            for (int step = 1; step < steps; ++step) {
+                vector pos{from.x + step_x * step, from.y + step_y * step};
+                if (map[pos.x][pos.y] != 0) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         bool is_king_in_check(int color) const {
