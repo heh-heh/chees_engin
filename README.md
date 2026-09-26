@@ -43,7 +43,8 @@
 
 - CMake 3.16 이상
 - C++17 컴파일러
-- OpenGL 개발 환경(Linux/macOS)
+- Linux/macOS에서는 OpenGL 개발 환경이 필요
+- Windows에서 직접 빌드할 때는 OpenGL을 사용할 수 있는 C++ 빌드 환경이 필요
 - 저장소 내 `third_party/imgui`, `third_party/glfw` 소스
 
 ## 빌드
