@@ -86,11 +86,17 @@ cd <repository-root>
 ./build/chess_gui
 ```
 
+### Windows 실행 메모
+
+- 배포 ZIP을 사용하는 경우 압축 해제 후 포함된 `chess_gui.exe`를 실행합니다.
+- Windows에서 직접 빌드한 경우에는 생성된 빌드 출력 디렉터리의 `chess_gui.exe`를 실행합니다.
+- 멀티 구성 생성기에서는 보통 `build/Release/chess_gui.exe` 형태로 생성됩니다.
+
 ### 콘솔 진입점 실행
 
 아래 명령은 Linux/macOS 기준입니다.
 
-`chess_console`는 내부적으로 GUI 실행 파일을 호출하므로, 먼저 GUI 빌드가 완료되어 있어야 합니다.
+`chess_console`는 내부적으로 `./build/chess_gui` 경로의 GUI 실행 파일을 호출하므로, 먼저 GUI 빌드가 완료되어 있어야 합니다. 해당 파일이 없으면 실행에 실패합니다.
 
 ```bash
 cd <repository-root>
