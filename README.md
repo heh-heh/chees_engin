@@ -90,6 +90,8 @@ cd <repository-root>
 
 아래 명령은 Linux/macOS 기준입니다.
 
+`chess_console`는 내부적으로 GUI 실행 파일을 호출하므로, 먼저 GUI 빌드가 완료되어 있어야 합니다.
+
 ```bash
 cd <repository-root>
 ./build/chess_console
