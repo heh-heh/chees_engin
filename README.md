@@ -26,7 +26,7 @@
 
 - `src/main.cpp`
 - `chess_console` 타깃으로 빌드됨
-- 실행 시 안내 메시지를 출력한 뒤 `./build/chess_gui`를 호출하는 간단한 런처 역할
+- Linux/macOS 기준으로 안내 메시지를 출력한 뒤 `./build/chess_gui`를 호출하는 간단한 런처 역할
 
 ### 네트워크
 
@@ -71,6 +71,8 @@ cmake --build build --config Release
 
 ### GUI 실행
 
+아래 명령은 Linux/macOS 기준입니다.
+
 ```bash
 cd <repository-root>
 ./scripts/run_gui.sh
@@ -84,6 +86,8 @@ cd <repository-root>
 ```
 
 ### 콘솔 진입점 실행
+
+아래 명령은 Linux/macOS 기준입니다.
 
 ```bash
 cd <repository-root>
@@ -115,6 +119,7 @@ ctest --test-dir build --output-on-failure
 - 현재 네트워크 연결에는 인증이나 암호화가 없습니다.
 - 신뢰할 수 있는 로컬 네트워크에서만 사용하는 것을 권장합니다.
 - 호스트 PC는 해당 TCP 포트 인바운드 허용이 필요할 수 있습니다.
+- Windows에서는 저장소에 포함된 배포 ZIP 또는 Windows용 빌드 결과를 사용해야 합니다.
 
 ## 프로젝트 구조
 
