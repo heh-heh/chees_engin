@@ -37,7 +37,8 @@
 ### 테스트
 
 - `tests/network_protocol_test.cpp`
-- 프로토콜 생성/파싱 동작 검증
+- `network_protocol_test` 타깃으로 빌드됨
+- CTest를 통해 프로토콜 생성/파싱 동작 검증
 
 ## 요구 사항
 
