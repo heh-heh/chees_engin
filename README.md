@@ -25,7 +25,8 @@
 ### 콘솔 진입점
 
 - `src/main.cpp`
-- `./build/chess_gui` 실행을 연결하는 간단한 런처 역할
+- `chess_console` 타깃으로 빌드됨
+- 실행 시 안내 메시지를 출력한 뒤 `./build/chess_gui`를 호출하는 간단한 런처 역할
 
 ### 네트워크
 
@@ -47,21 +48,23 @@
 
 ## 빌드
 
-루트 디렉터리:
+작업은 저장소 루트에서 진행합니다.
 
-`/home/runner/work/chees_engin/chees_engin`
+```bash
+cd <repository-root>
+```
 
 ### GUI 빌드
 
 ```bash
-cd /home/runner/work/chees_engin/chees_engin
+cd <repository-root>
 ./scripts/build_gui.sh
 ```
 
 직접 빌드:
 
 ```bash
-cd /home/runner/work/chees_engin/chees_engin
+cd <repository-root>
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ```
@@ -69,28 +72,28 @@ cmake --build build --config Release
 ### GUI 실행
 
 ```bash
-cd /home/runner/work/chees_engin/chees_engin
+cd <repository-root>
 ./scripts/run_gui.sh
 ```
 
 또는:
 
 ```bash
-cd /home/runner/work/chees_engin/chees_engin
+cd <repository-root>
 ./build/chess_gui
 ```
 
 ### 콘솔 진입점 실행
 
 ```bash
-cd /home/runner/work/chees_engin/chees_engin
+cd <repository-root>
 ./build/chess_console
 ```
 
 ## 테스트 실행
 
 ```bash
-cd /home/runner/work/chees_engin/chees_engin
+cd <repository-root>
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --config Release
 ctest --test-dir build --output-on-failure
