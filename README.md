@@ -123,16 +123,12 @@ ctest --test-dir build --output-on-failure
 
 ## 프로젝트 구조
 
-아래 구조는 주요 소스 디렉터리와 함께 배포 산출물 예시도 포함한 개요입니다.
+아래 구조는 주요 소스 디렉터리 중심의 개요입니다.
 
 ```text
 repository-root/
 ├── CMakeLists.txt
 ├── README.md
-├── chess_windows_release/                # 배포 산출물 예시
-│   └── README.md
-├── chess_windows_release.zip             # 배포 산출물 예시
-├── chess_windows_release_with_dlls.zip   # 배포 산출물 예시
 ├── gui/
 │   └── main.cpp
 ├── scripts/
@@ -149,6 +145,12 @@ repository-root/
 │   └── network_protocol_test.cpp
 └── third_party/
 ```
+
+### 배포 산출물 예시
+
+- `chess_windows_release/`
+- `chess_windows_release.zip`
+- `chess_windows_release_with_dlls.zip`
 
 ## 앞으로 보완할 부분
 
