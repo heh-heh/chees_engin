@@ -96,7 +96,7 @@ cd <repository-root>
 
 아래 명령은 Linux/macOS 기준입니다.
 
-`chess_console`는 내부적으로 `./build/chess_gui` 경로의 GUI 실행 파일을 호출하므로, 먼저 GUI 빌드가 완료되어 있어야 합니다. 해당 파일이 없으면 실행에 실패합니다.
+Linux/macOS에서 `chess_console`는 내부적으로 `./build/chess_gui` 경로의 GUI 실행 파일을 호출하므로, 먼저 GUI 빌드가 완료되어 있어야 합니다. 해당 파일이 없으면 실행에 실패합니다. Windows에서는 이 콘솔 진입점 대신 `chess_gui.exe`를 직접 실행하는 편이 명확합니다.
 
 ```bash
 cd <repository-root>
@@ -133,7 +133,7 @@ ctest --test-dir build --output-on-failure
 
 ## 프로젝트 구조
 
-아래 구조는 주요 소스 디렉터리 중심의 개요입니다.
+아래 구조는 주요 소스 디렉터리 중심의 예시 개요입니다.
 
 ```text
 repository-root/
@@ -147,13 +147,17 @@ repository-root/
 ├── src/
 │   ├── main.cpp
 │   ├── game/
+│   │   └── ...
 │   ├── manager/
+│   │   └── ...
 │   ├── network/
 │   │   └── chess_protocol.hpp
 │   └── object/
+│       └── ...
 ├── tests/
 │   └── network_protocol_test.cpp
 └── third_party/
+    └── ...
 ```
 
 ### 배포 산출물 예시
