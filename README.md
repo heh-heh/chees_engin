@@ -26,7 +26,7 @@
 
 - `src/main.cpp`
 - `chess_console` 타깃으로 빌드됨
-- Linux/macOS 기준으로 안내 메시지를 출력한 뒤 `./build/chess_gui`를 호출하는 간단한 런처 역할
+- Linux/macOS 기준으로 안내 메시지를 출력한 뒤 빌드된 GUI 실행 파일을 호출하는 간단한 런처 역할
 
 ### 네트워크
 
