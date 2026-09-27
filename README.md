@@ -11,7 +11,8 @@ C++ 학습과 체스 엔진 설계 실험을 목표로 시작한 프로젝트입
 3. ImGui + GLFW 기반 GUI 보드 프로토타입 추가
 4. 표준 체스 보드 방향 정리
 5. Windows용 실행 파일 패키징
-6. 앞으로는 호스트-클라이언트 방식 네트워크 체스 구현을 계획
+6. 호스트-클라이언트 방식 LAN 네트워크 체스 구현
+7. GUI를 Qt Widgets 기반으로 전면 재구성 (imgui/glfw 제거)
 
 현재 코드 구조는 체스 엔진의 핵심 규칙을 별도 계층으로 분리해 두고, 보드 상태와 기물 상태를 함께 관리할 수 있도록 설계되어 있습니다. 아직 완전한 체스 규칙 엔진으로는 완성되지 않았지만, 기물 이동과 턴 흐름, 보드 표현, 기본 GUI 흐름까지는 프로젝트의 핵심 구성을 확인할 수 있는 수준까지 정리되었습니다.
 
@@ -26,19 +27,20 @@ C++ 학습과 체스 엔진 설계 실험을 목표로 시작한 프로젝트입
 - 잡힌 기물 처리와 턴 전환 로직을 포함
 - 표준 체스 시각 기준에 맞춰 흰색이 아래쪽, 검은색이 위쪽에 위치하도록 정리
 
-### 2. GUI 기반 보드 프로토타입
+### 2. GUI (Qt Widgets)
 
-- ImGui와 GLFW를 사용한 보드 UI 구현
-- 기물 표시는 ASCII 기반으로 표현하여 폰트 호환성 문제 회피
+- Qt6 Widgets 기반으로 시작 화면, 로비, 모드 선택, 대기실, 대국 화면을 구성
+- 체스판은 `QWidget` 커스텀 페인팅으로 구현하고 유니코드 체스 기물 글리프로 표시
 - 보드 선택 및 이동 후보 하이라이트 구현
-- 기본 턴 관리와 Reset 동작 구현
-- 현재는 엔진 로직과 연결된 구조로 유지하도록 정리 중
+- 기본 턴 관리와 Reset/New Game 동작 구현
+- 멀티플레이어 대기실, 채팅, 체크메이트 다이얼로그 등 기존 기능을 동일하게 유지
+- 네트워크 통신은 `QTcpServer`/`QTcpSocket` 기반으로 처리 (수동 스레드/뮤텍스 제거)
 
 ### 3. Windows 빌드 패키징
 
-- Linux와 Windows용 빌드를 모두 생성 가능
-- Windows 실행 파일과 필수 DLL을 함께 묶어 배포 ZIP 생성
-- dist 폴더에 Windows 번들을 보관하도록 구성
+- Linux 네이티브 빌드(`build/`)와 mingw-w64 크로스 컴파일 Windows 빌드(`build-win/`)를 모두 생성 가능
+- `cmake/toolchain-mingw-w64.cmake` 툴체인 파일로 `x86_64-w64-mingw32-g++`(posix 스레드) 크로스 컴파일러를 사용하고, Qt는 aqtinstall로 받은 `win64_mingw` 빌드를 링크 대상으로, 버전이 일치하는 `linux_gcc_64` 빌드를 moc/uic/rcc 호스트 툴로 사용
+- `scripts/package_windows.sh`가 크로스 빌드 후 `chess_gui.exe`, `chess_console.exe`와 필요한 `Qt6*.dll`, `platforms/qwindows.dll`, `libwinpthread-1.dll`을 `chess_windows_release/`에 모아 zip으로 묶는다
 
 ### 4. LAN 멀티플레이어
 
@@ -46,6 +48,14 @@ C++ 학습과 체스 엔진 설계 실험을 목표로 시작한 프로젝트입
 - 클라이언트는 호스트의 LAN IPv4 주소 또는 호스트 이름과 포트를 입력해 접속하고, 검은색 기물을 조작한다.
 - TCP 이동, 채팅, 준비, 시작, 상태 메시지는 줄 단위로 프레이밍되어 여러 메시지가 한 번에 도착하거나 분할 도착해도 처리할 수 있다.
 - 양쪽 플레이어가 준비를 완료하면 호스트가 게임을 시작하며, 호스트 기준 턴 시간과 점수가 클라이언트에도 표시된다.
+
+### 5. 릴레이 서버 (`relay_server`)
+
+- 체스 로직이 전혀 없는 순수 TCP 중계 전용 프로그램. `chess_gui`의 호스트/클라이언트가 각각 릴레이 서버로 outbound 연결만 하면 되므로, 호스트 쪽 포트 포워딩/방화벽 설정 없이도 인터넷을 통한 매칭이 가능하다.
+- 프로토콜: 접속 직후 한 줄짜리 핸드셰이크 `HELLO|HOST|<room_code>` 또는 `HELLO|CLIENT|<room_code>`를 보낸다. 같은 room code로 HOST/CLIENT가 모두 접속하면 서버가 양쪽에 `PAIRED`를 보내고, 이후부터는 두 소켓 사이의 바이트를 그대로 전달만 한다(기존 MOVE/CHAT/READY/START/STATE 메시지 형식이 그대로 통과).
+- room code가 이미 사용 중이면 `ERROR|room code already in use`, 존재하지 않는 room에 join하면 `ERROR|room not found`를 보내고 연결을 끊는다.
+- 실행: `./relay_server --port 9100` (기본 포트 `9100`). 공인 IP를 가진 서버(VPS 등)에서 실행하면 릴레이 TCP는 `9100`, 브라우저 상태 페이지는 자동으로 `9101`에서 열린다.
+- 상태 페이지: 브라우저에서 `http://<서버 주소>:9101`로 접속하면 현재 TCP 접속자 수, 대기 중인 방, 대국 중인 방을 5초마다 확인할 수 있다.
 
 ## 다른 PC에서 접속하기
 
@@ -59,17 +69,38 @@ C++ 학습과 체스 엔진 설계 실험을 목표로 시작한 프로젝트입
 
 호스트 PC의 방화벽은 해당 포트의 TCP 인바운드 연결을 허용해야 합니다. 서로 다른 인터넷망에서 접속하려면 호스트 공유기의 TCP 포트 포워딩도 필요합니다. 현재 연결에는 인증이나 암호화가 없으므로 신뢰할 수 있는 네트워크에서만 사용해야 합니다.
 
+## 릴레이 서버로 인터넷을 통해 접속하기
+
+포트 포워딩 없이 서로 다른 네트워크에 있는 두 사람이 접속하려면 공인 IP를 가진 서버에서 `relay_server`를 띄워 중계하면 됩니다.
+
+1. 공인 IP가 있는 서버(클라우드 VPS 등)에서 릴레이 서버를 실행합니다.
+   ```bash
+   ./relay_server --port 9100
+   ```
+   해당 서버의 방화벽에서 릴레이용 `9100` 포트와 상태 페이지용 `9101` 포트(TCP) 인바운드를 열어두면 됩니다. 상태 페이지를 외부에 공개하지 않으려면 `9101`은 방화벽에서 열지 않아도 됩니다.
+2. 호스트 플레이어는 GUI의 `Mode Select` 화면에서 `Relay Server` 영역의 `Use relay server`를 체크하고, `Relay Address`에 릴레이 서버의 공인 IP/도메인, `Relay Port`에 `9100`, `Room Code`에 원하는 방 코드를 입력한 뒤 `Host Match`를 누릅니다.
+3. 클라이언트 플레이어도 같은 방식으로 `Use relay server`를 체크하고 동일한 `Relay Address`/`Relay Port`/`Room Code`를 입력한 뒤 `Join Match`를 누릅니다.
+4. 릴레이 서버가 같은 room code의 호스트/클라이언트를 짝지으면 이후 흐름(준비, 시작, 대국, 채팅)은 LAN 멀티플레이어와 동일합니다.
+
+릴레이 서버는 두 소켓 사이의 바이트를 그대로 전달만 할 뿐 체스 로직이나 메시지 내용을 해석하지 않으며, 별도의 인증이나 암호화도 없습니다. 신뢰할 수 있는 서버에서만 운영하는 것을 권장합니다.
+
 ## 프로젝트 구조
 
 ```text
 chees_engin/
 ├── CMakeLists.txt
 ├── README.md
-├── dist/
+├── cmake/
+│   └── toolchain-mingw-w64.cmake
 ├── build/
 ├── build-win/
 ├── gui/
-│   └── main.cpp
+│   ├── main.cpp
+│   ├── MainWindow.h / .cpp
+│   ├── GameSession.h / .cpp
+│   ├── NetworkSession.h / .cpp
+│   ├── BoardWidget.h / .cpp
+│   └── StartPage / LobbyPage / ModeSelectPage / WaitingRoomPage / GamePage
 ├── scripts/
 ├── src/
 │   ├── main.cpp
@@ -86,8 +117,32 @@ chees_engin/
 │   │   └── Director.cpp
 │   └── object/
 │       └── pieces.cpp
-└── third_party/
+└── chess_windows_release/
 ```
+
+## Windows용 빌드 (mingw-w64 크로스 컴파일)
+
+Linux에서 Windows 실행 파일을 생성하려면 mingw-w64 툴체인과 Windows/Linux용 Qt6가 모두 필요합니다.
+
+1. mingw-w64 크로스 컴파일러 설치, posix 스레드 모델로 전환 (Qt가 요구하는 std::thread 지원을 위해 필요):
+   ```bash
+   sudo apt-get install -y g++-mingw-w64-x86-64
+   sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+   sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
+   ```
+2. aqtinstall로 Windows(mingw) Qt와, moc/uic/rcc 실행에 쓸 버전이 동일한 Linux Qt를 받는다:
+   ```bash
+   pip install aqtinstall
+   python3 -m aqt install-qt windows desktop 6.8.3 win64_mingw -O /opt/qt
+   python3 -m aqt install-qt linux desktop 6.8.3 linux_gcc_64 -O /opt/qt
+   ```
+3. 빌드 및 배포 패키징:
+   ```bash
+   ./scripts/package_windows.sh
+   ```
+   내부적으로 `cmake -S . -B build-win -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-mingw-w64.cmake`로 구성한 뒤 빌드하고, 결과물을 `chess_windows_release/`와 `chess_windows_release.zip`으로 묶는다.
+
+Qt 설치 경로가 다르면 `QT_MINGW_PREFIX`, `QT_HOST_PATH` 환경변수(또는 툴체인 파일의 기본값)를 맞게 바꿔야 한다. host/target Qt 버전이 다르면 CMake가 moc/uic 패키지를 target(Windows) 경로로 잘못 해석해 실행 불가능한 `.exe` 도구를 호출하려 하므로, 두 Qt는 반드시 동일 버전이어야 한다.
 
 ## 핵심 개발 방향
 
